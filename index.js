@@ -25,7 +25,7 @@ async function ImageGeneration(prompt, callback) {
     sanitize: true,
     clip_skip: 1
   });
-  //debug.log("START: " + prompt + "\n" + JSON.stringify(generation));
+  debug.log("Image Generation: " + generation.id + " Prompt:\n" + prompt + "\n");
   await CheckImageGeneration(generation.id, callback);
 }
 // Funktion zum starten der text generation
@@ -70,15 +70,14 @@ async function TextGeneration(prompt, callback) {
     trusted_workers: false,
     models: [ 'koboldcpp/L3-8B-Stheno-v3.2' ]
   });
-  //debug.log("START: " + prompt + "\n" + JSON.stringify(generation));
+  debug.log("Text Generation: " + generation.id + " Prompt:\n" + prompt + "\n");
   await CheckTextGeneration(generation.id, callback);
 }
 
 exports.ImageGeneration = ImageGeneration;
 exports.TextGeneration = TextGeneration;
 
-// Preuf Funktionen und sowas?
-
+// Pruef Funktionen und sowas?
 async function CheckImageGeneration(generation_id, callback) {
   var check = await ai_horde.getImageGenerationCheck(generation_id);
 
@@ -87,28 +86,25 @@ async function CheckImageGeneration(generation_id, callback) {
       setTimeout(() => {CheckImageGeneration(generation_id, callback);}, 5000);
       return;
     }
-    setTimeout(() => {CheckImageGeneration(generation_id, callback);}, 1000*(check.wait_time/10));
+    setTimeout(() => {CheckImageGeneration(generation_id, callback);}, 1000*(check.wait_time/3));
     return;
   }
 
   var check = await ai_horde.getImageGenerationStatus(generation_id);
-  //debug.log("IMAGE: " + generation_id + " STATUS: " +JSON.stringify(check));
   callback(check.generations[0].img);
 }
 async function CheckTextGeneration(generation_id, callback) {
   var check = await ai_horde.getTextGenerationStatus(generation_id);
-  //debug.log("TEXT: " + generation_id + " CHECK: " +JSON.stringify(check));
 
   if (check.done == false) {
     if (check.wait_time==0) {
       setTimeout(() => {CheckTextGeneration(generation_id, callback);}, 1000);
       return;
     }
-    setTimeout(() => {CheckTextGeneration(generation_id, callback);}, 1000*(check.wait_time/10));
+    setTimeout(() => {CheckTextGeneration(generation_id, callback);}, 1000*(check.wait_time/3));
     return;
   }
 
   var check = await ai_horde.getTextGenerationStatus(generation_id);
-  //debug.log("TEXT: " + generation_id + " STATUS: " +JSON.stringify(check));
   callback(check.generations[0].text);
 }
