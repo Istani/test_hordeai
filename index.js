@@ -25,7 +25,7 @@ async function ImageGeneration(prompt, callback) {
     sanitize: true,
     clip_skip: 1
   });
-  debug.log("START: " + prompt + "\n" + JSON.stringify(generation));
+  //debug.log("START: " + prompt + "\n" + JSON.stringify(generation));
   await CheckImageGeneration(generation.id, callback);
 }
 // Funktion zum starten der text generation
@@ -53,7 +53,7 @@ async function TextGeneration(prompt, callback) {
       typical: 1,
       use_world_info: false,
       singleline: false,
-      stop_sequence: [ '\n', '\SYTH:' ],
+      stop_sequence: [ '\n', '\SYTH:', '\StoryTelling:' ],
       streaming: false,
       can_abort: false,
       mirostat: 0,
@@ -91,9 +91,8 @@ async function CheckImageGeneration(generation_id, callback) {
     return;
   }
 
-  debug.log("IMAGE: " + generation_id + " CHECK: " +JSON.stringify(check));
   var check = await ai_horde.getImageGenerationStatus(generation_id);
-  debug.log("IMAGE: " + generation_id + " STATUS: " +JSON.stringify(check));
+  //debug.log("IMAGE: " + generation_id + " STATUS: " +JSON.stringify(check));
   callback(check.generations[0].img);
 }
 async function CheckTextGeneration(generation_id, callback) {
