@@ -7,8 +7,6 @@ const ai_horde = new AIHorde({
   client_agent: "@Istani:v0.0.1:DEV_Test"
 });
 
-// Todo: Irgendwas mit Datenbank damit die Generation nicht verschwindet und gleichzeitig den Callback ersetzen?
-
 // Funktion zum starten der image generation
 async function ImageGeneration(prompt, callback) {
   const generation = await ai_horde.postAsyncImageGenerate({
@@ -25,7 +23,6 @@ async function ImageGeneration(prompt, callback) {
     sanitize: true,
     clip_skip: 1
   });
-  debug.log("Image Generation: " + generation.id + " Prompt:\n" + prompt + "\n");
   await CheckImageGeneration(generation.id, callback);
 }
 // Funktion zum starten der text generation
@@ -70,7 +67,6 @@ async function TextGeneration(prompt, callback) {
     trusted_workers: false,
     models: [ 'koboldcpp/L3-8B-Stheno-v3.2' ]
   });
-  debug.log("Text Generation: " + generation.id + " Prompt:\n" + prompt + "\n");
   await CheckTextGeneration(generation.id, callback);
 }
 
