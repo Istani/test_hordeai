@@ -102,5 +102,5 @@ async function CheckTextGeneration(generation_id, callback) {
   }
 
   var check = await ai_horde.getTextGenerationStatus(generation_id);
-  callback(check.generations[0].text);
+  callback(check.generations[0].text.replaceAll("\n",""));
 }
